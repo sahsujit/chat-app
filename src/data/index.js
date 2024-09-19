@@ -169,7 +169,7 @@ const Chat_History = [
   },
   {
     type: "msg",
-    message: "Can you please send this in file format?",
+    message: "Can you please send this in file format? Can you please send this in file format?Can you please send this in file format?Can you please send this in file format?Can you please send this in file format?",
     incoming: false,
     outgoing: true,
   },

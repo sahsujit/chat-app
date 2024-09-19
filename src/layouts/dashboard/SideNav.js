@@ -61,6 +61,7 @@ const SideBar = () => {
     >
       <Stack
         py={3}
+      
         alignItems={"center"}
         justifyContent="space-between"
         sx={{ height: "100%" }}
@@ -84,7 +85,7 @@ const SideBar = () => {
             spacing={3}
           >
             {Nav_Buttons.map((el) => {
-              return el.index == selectedTab ? (
+              return el.index === selectedTab ? (
                 <Box
                   sx={{
                     backgroundColor: theme.palette.primary.main,
@@ -120,7 +121,7 @@ const SideBar = () => {
             })}
             <Divider sx={{ width: 48 }} />
             {Nav_Setting.map((el) => {
-              return el.index == selectedTab ? (
+              return el.index === selectedTab ? (
                 <Box
                   sx={{
                     backgroundColor: theme.palette.primary.main,
