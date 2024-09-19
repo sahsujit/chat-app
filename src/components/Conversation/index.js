@@ -1,9 +1,26 @@
 import { faker } from '@faker-js/faker';
-import { Avatar, Box, Stack, styled, Badge, Typography, IconButton, Divider, TextField, InputAdornment } from '@mui/material'
+import { Avatar, Box, Stack, styled, Badge, Typography, IconButton, Divider, TextField, InputAdornment, Tooltip, Fab } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
-import { CaretDown, Link, MagnifyingGlass, PaperPlaneTilt, Phone, Smiley, VideoCamera } from 'phosphor-react';
-import React from 'react'
+import {
+    CaretDown,
+    
+    MagnifyingGlass,
+    PaperPlaneTilt,
+    Phone,
+    Smiley,
+    VideoCamera,
+    Camera,
+    File,
+    Image,
+    
+  
+    Sticker,
+    User,
+    LinkSimple
+} from 'phosphor-react';
+import React, { } from 'react'
 import Message from './Message';
+import EmojiPicker from 'emoji-picker-react';
 // import { SimpleBarStyle } from '../Scrollbar';
 
 
@@ -38,6 +55,8 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 
 
+
+
 const StyledInput = styled(TextField)(({ theme }) => ({
     "& .MuiInputBase-input": {
         paddingTop: "12px !important",
@@ -46,8 +65,107 @@ const StyledInput = styled(TextField)(({ theme }) => ({
 }));
 
 
+const Actions = [
+    {
+        color: "#4da5fe",
+        icon: <Image size={24} />,
+        y: 102,
+        title: "Photo/Video",
+    },
+    {
+        color: "#1b8cfe",
+        icon: <Sticker size={24} />,
+        y: 172,
+        title: "Stickers",
+    },
+    {
+        color: "#0172e4",
+        icon: <Camera size={24} />,
+        y: 242,
+        title: "Image",
+    },
+    {
+        color: "#0159b2",
+        icon: <File size={24} />,
+        y: 312,
+        title: "Document",
+    },
+    {
+        color: "#013f7f",
+        icon: <User size={24} />,
+        y: 382,
+        title: "Contact",
+    },
+];
+
+const ChatInput = ({ openPicker, setOpenPicker }) => {
+    const [openActions, setOpenActions] = React.useState(false);
+
+    return (
+        <StyledInput
+            variant="filled"
+            fullWidth
+            placeholder="Write a message..."
+            InputProps={{
+                disableUnderline: true,
+                startAdornment: (
+                    <Stack sx={{ width: "max-content" }}>
+                      <Stack
+                        sx={{
+                          position: "relative",
+                          display: openActions ? "inline-block" : "none",
+                        }}
+                      >
+                        {Actions.map((el) => (
+                          <Tooltip placement="right" title={el.title}>
+                            <Fab
+                              onClick={() => {
+                                setOpenActions(!openActions);
+                              }}
+                              sx={{
+                                position: "absolute",
+                                top: -el.y,
+                                backgroundColor: el.color,
+                              }}
+                              aria-label="add"
+                            >
+                              {el.icon}
+                            </Fab>
+                          </Tooltip>
+                        ))}
+                      </Stack>
+          
+                      <InputAdornment>
+                        <IconButton
+                          onClick={() => {
+                            setOpenActions(!openActions);
+                          }}
+                        >
+                          <LinkSimple />
+                        </IconButton>
+                      </InputAdornment>
+                    </Stack>
+                  ),
+                endAdornment: <InputAdornment>
+                    <IconButton onClick={() => {
+                        setOpenPicker(!openPicker);
+                    }}>
+                        <Smiley />
+                    </IconButton>
+                </InputAdornment>,
+
+
+
+            }}
+        />
+
+    )
+}
+
 const Conversation = () => {
     const theme = useTheme()
+    const [openPicker, setOpenPicker] = React.useState(false)
+
     return (
         <Stack
             height={"100%"}
@@ -127,9 +245,9 @@ const Conversation = () => {
             <Box width={"100%"} sx={{
                 position: "relative",
                 flexGrow: 1,
-               
+
                 overflowY: "scroll",
-               
+
                 backgroundColor:
                     theme.palette.mode === "light"
                         ? "#F0F4FA"
@@ -137,11 +255,11 @@ const Conversation = () => {
 
                 boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
             }}>
-               
-               <Message/>
 
-              
-               
+                <Message />
+
+
+
             </Box>
 
             <Box
@@ -162,27 +280,30 @@ const Conversation = () => {
 
                 >
 
-                    <StyledInput
-                        variant="filled"
-                        fullWidth
-                        placeholder="Write a message..."
-                        InputProps={{
-                            disableUnderline: true,
-                            startAdornment: <InputAdornment>
-                                <IconButton>
-                                    <Link />
-                                </IconButton>
-                            </InputAdornment>,
-                            endAdornment: <InputAdornment>
-                                <IconButton>
-                                    <Smiley />
-                                </IconButton>
-                            </InputAdornment>,
+                    {/* {chat input} */}
 
+                    <Stack sx={{ width: "100%" }}>
+                        <Box
+                            style={{
+                                zIndex: 10,
+                                position: "fixed",
+                                display: openPicker ? "inline" : "none",
+                                bottom: 81,
+                                right: 100,
+                            }}
+                        >
 
+                            <EmojiPicker
+                                theme={theme.palette.mode}
+                            />
+                        </Box>
 
-                        }}
-                    />
+                        <ChatInput
+
+                            openPicker={openPicker}
+                            setOpenPicker={setOpenPicker}
+                        />
+                    </Stack>
 
                     <Box sx={{
                         height: 48,

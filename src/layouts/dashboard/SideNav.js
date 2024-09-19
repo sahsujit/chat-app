@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useTheme } from "@mui/material/styles";
 
-import { Avatar, Box, Divider, IconButton, Stack } from "@mui/material";
+import { Avatar, Box, Divider, IconButton, Menu, MenuItem, Stack } from "@mui/material";
 import AntSwitch from "../../components/AntSwitch";
 
 import Logo from "../../assets/Images/logo.ico";
 
 import useSettings from "../../hooks/useSettings";
-import { Nav_Buttons, Nav_Setting } from "../../data";
+import { Nav_Buttons, Nav_Setting, Profile_Menu } from "../../data";
 import { faker } from '@faker-js/faker';
 
 
@@ -33,6 +33,15 @@ import { faker } from '@faker-js/faker';
 
 const SideBar = () => {
   const theme = useTheme();
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
 
 
@@ -61,7 +70,7 @@ const SideBar = () => {
     >
       <Stack
         py={3}
-      
+
         alignItems={"center"}
         justifyContent="space-between"
         sx={{ height: "100%" }}
@@ -166,9 +175,49 @@ const SideBar = () => {
           />
           {/* Profile Menu */}
           {/* <ProfileMenu /> */}
-          <Avatar src={faker.image.people()}/>
+          <Avatar
+            id="basic-button"
+            aria-controls={open ? "basic-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+            onClick={handleClick}
+           src={faker.image.people()} />
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            transformOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+          >
+            <Stack spacing={1} px={1}>
+              {Profile_Menu.map((el, index) => (
+                <MenuItem key={index} 
+                onClick={handleClose}
+               >
+                  <Stack
+                   sx={{ width: 100 }}
+                   direction="row"
+                   alignItems={"center"}
+                   justifyContent="space-between"
+                  >
+                  <span>{el.title}</span>
+                  {el.icon}
+                  </Stack>{" "}
+                </MenuItem>
+              ))}
+            </Stack>
+          </Menu>
 
-        
         </Stack>
       </Stack>
     </Box>
