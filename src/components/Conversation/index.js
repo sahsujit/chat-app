@@ -21,6 +21,8 @@ import {
 import React, { } from 'react'
 import Message from './Message';
 import EmojiPicker from 'emoji-picker-react';
+import { ToggleSidebar } from '../../redux/slices/app';
+import { useDispatch } from 'react-redux';
 // import { SimpleBarStyle } from '../Scrollbar';
 
 
@@ -165,6 +167,7 @@ const ChatInput = ({ openPicker, setOpenPicker }) => {
 const Conversation = () => {
     const theme = useTheme()
     const [openPicker, setOpenPicker] = React.useState(false)
+    const dispatch = useDispatch()
 
     return (
         <Stack
@@ -192,6 +195,7 @@ const Conversation = () => {
                     <Stack
                         spacing={2}
                         direction={"row"}
+                        onClick={()=>dispatch(ToggleSidebar())}
                     >
                         <Box>
                             <StyledBadge
