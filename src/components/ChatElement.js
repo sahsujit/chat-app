@@ -68,7 +68,7 @@ const ChatElement = ({ img, name, msg, time, unread, online, id }) => {
 
         backgroundColor: 
         theme.palette.mode === "light"
-        ? alpha(theme.palette.primary.main, 0.5)
+        ? (theme.palette.primary.main, 0.5)
         : theme.palette.primary.main
        
       }}
