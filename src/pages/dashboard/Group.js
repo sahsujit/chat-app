@@ -1,13 +1,22 @@
 import { Box, Divider, IconButton, Link, Stack, Typography } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import { useTheme } from "@mui/material/styles"
 import { Search, SearchIconWrapper, StyledInputBase } from '../../components/Search'
 import { MagnifyingGlass, Plus } from 'phosphor-react'
 import ChatElement from '../../components/ChatElement'
 import { ChatList } from '../../data'
+import CreateGroup from '../../sections/main/CreateGroup'
 
 const Group = () => {
     const theme = useTheme()
+    const [openDialog, setOpenDialog] = useState(false);
+
+    const handleCloseDialog = () => {
+      setOpenDialog(false);
+    }
+    const handleOpenDialog = () => {
+      setOpenDialog(true);
+    }
     return (
         <>
             <Stack direction="row" sx={{ width: "100%" }}>
@@ -57,7 +66,7 @@ const Group = () => {
                                 Create New Group
                             </Typography>
                             <IconButton
-                            // onClick={handleOpenDialog}
+                            onClick={handleOpenDialog}
                             >
                                 <Plus style={{ color: theme.palette.primary.main }} />
                             </IconButton>
@@ -90,6 +99,7 @@ const Group = () => {
                 </Box>
 
             </Stack>
+            {openDialog && <CreateGroup open={openDialog} handleClose={handleCloseDialog} />}
         </>
     )
 }
