@@ -40,6 +40,7 @@ export default function Router() {
         { path: "app", element: <GeneralApp /> },
         { path: "settings", element: <Settings /> },
         { path: "group", element: <Group /> },
+        { path: "profile", element: <Profile /> },
 
          {path: "call", element: <CallPage />},
         { path: "404", element: <Page404 /> },
@@ -70,3 +71,6 @@ const NewPasswordPage = Loadable(
 const Settings = Loadable(lazy(() => import("../pages/dashboard/Settings")));
 
 
+const Profile = Loadable(
+  lazy(() => import("../pages/dashboard/Profile"))
+);

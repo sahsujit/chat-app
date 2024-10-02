@@ -9,31 +9,32 @@ import Logo from "../../assets/Images/logo.ico";
 import useSettings from "../../hooks/useSettings";
 import { Nav_Buttons, Nav_Setting, Profile_Menu } from "../../data";
 import { faker } from '@faker-js/faker';
+import { useNavigate } from "react-router-dom";
 
 
 
-// const getPath = (index) => {
-//   switch (index) {
-//     case 0:
-//       return "/app";
+const getPath = (index) => {
+  switch (index) {
+    case 0:
+      return "/app";
 
-//     case 1:
-//       return "/group";
+    case 1:
+      return "/group";
 
-//     case 2:
-//       return "/call";
+    case 2:
+      return "/call";
 
-//     case 3:
-//       return "/settings";
+    case 3:
+      return "/settings";
 
-//     default:
-//       break;
-//   }
-// };
+    default:
+      break;
+  }
+};
 
 const SideBar = () => {
   const theme = useTheme();
-
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -105,6 +106,7 @@ const SideBar = () => {
                   <IconButton
                     onClick={() => {
                       setSelectedTab(el.index);
+
                     }}
                     sx={{ width: "max-content", color: "#ffffff" }}
                   >
@@ -115,6 +117,7 @@ const SideBar = () => {
                 <IconButton
                   onClick={() => {
                     setSelectedTab(el.index);
+                    navigate(getPath(el.index))
                   }}
                   sx={{
                     width: "max-content",
@@ -151,6 +154,7 @@ const SideBar = () => {
                 <IconButton
                   onClick={() => {
                     setSelectedTab(el.index);
+                    navigate(getPath(3))
 
                     // dispatch(UpdateTab(el.index));
                   }}
@@ -181,7 +185,7 @@ const SideBar = () => {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
             onClick={handleClick}
-           src={faker.image.people()} />
+            src={faker.image.people()} />
           <Menu
             id="basic-menu"
             anchorEl={anchorEl}
@@ -201,17 +205,30 @@ const SideBar = () => {
           >
             <Stack spacing={1} px={1}>
               {Profile_Menu.map((el, index) => (
-                <MenuItem key={index} 
-                onClick={handleClose}
-               >
+                <MenuItem key={index}
+                  onClick={handleClose}
+                >
                   <Stack
-                   sx={{ width: 100 }}
-                   direction="row"
-                   alignItems={"center"}
-                   justifyContent="space-between"
+
+                    onClick={() => {
+                      if (index === 0) {
+                        navigate("/profile");
+                      }
+                      else if (index === 1) {
+                        navigate("/settings");
+                      }
+                      else {
+                        navigate("/auth/login");
+
+                      }
+                    }}
+                    sx={{ width: 100 }}
+                    direction="row"
+                    alignItems={"center"}
+                    justifyContent="space-between"
                   >
-                  <span>{el.title}</span>
-                  {el.icon}
+                    <span>{el.title}</span>
+                    {el.icon}
                   </Stack>{" "}
                 </MenuItem>
               ))}
