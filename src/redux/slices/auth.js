@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "../../utils/axios";
+import { dispatch } from "../store";
 
 const initialState = {
     isLoggedIn: false,
@@ -81,4 +82,12 @@ const initialState = {
           );
         });
     };
+  };
+
+
+  export function LogoutUser(){
+    return async (dispatch, getState) =>{
+        window.localStorage.removeItem("user_id")
+        dispatch(slice.actions.signOut())
+    }
   }
