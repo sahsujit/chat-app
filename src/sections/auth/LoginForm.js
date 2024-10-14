@@ -10,16 +10,16 @@ import { Link, Stack, Alert, IconButton, InputAdornment, Button } from "@mui/mat
 // components
 import FormProvider, { RHFTextField } from "../../components/hook-form";
 import { Eye, EyeSlash } from "phosphor-react";
-// import { LoginUser } from "../../redux/slices/auth";
-// import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { LoginUser } from "../../redux/slices/auth";
 
 // ----------------------------------------------------------------------
 
 export default function AuthLoginForm() {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
 
-  // const {isLoading} = useSelector((state) => state.auth);
+  const {isLoading} = useSelector((state) => state.auth);
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -47,7 +47,8 @@ export default function AuthLoginForm() {
 
   const onSubmit = async (data) => {
     try {
-     
+      console.log(data)
+     dispatch(LoginUser(data))
     } catch (error) {
       console.error(error);
       reset();
