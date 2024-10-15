@@ -8,6 +8,9 @@ import { Stack, IconButton, InputAdornment, Button } from '@mui/material';
 // components
 import FormProvider, { RHFTextField } from '../../components/hook-form';
 import { Eye, EyeSlash } from 'phosphor-react';
+import { NewPassword } from '../../redux/slices/auth';
+import { useDispatch } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
@@ -16,7 +19,8 @@ export default function NewPasswordForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false); // separate state for confirm password
 
-
+const dispatch = useDispatch()
+const [queryParameters] = useSearchParams()
   const VerifyCodeSchema = Yup.object().shape({
     
     password: Yup.string()
@@ -45,7 +49,7 @@ export default function NewPasswordForm() {
   const onSubmit = async (data) => {
     try {
     //   Send API Request
-    // dispatch(NewPassword({...data, token: queryParameters.get('token')}));
+    dispatch(NewPassword({...data, token: queryParameters.get('token')}));
     } catch (error) {
       console.error(error);
     }

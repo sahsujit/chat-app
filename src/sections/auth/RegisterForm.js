@@ -8,9 +8,12 @@ import {  Stack, Alert, IconButton, InputAdornment, Button } from "@mui/material
 // components
 import FormProvider, { RHFTextField } from "../../components/hook-form";
 import { Eye, EyeSlash } from "phosphor-react";
+import { useDispatch } from "react-redux";
+import { RegisterUser } from "../../redux/slices/auth";
 
 const AuthRegisterForm = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const dispatch = useDispatch()
 
   // const {isLoading} = useSelector((state) => state.auth);
   const LoginSchema = Yup.object().shape({
@@ -44,6 +47,7 @@ const AuthRegisterForm = () => {
 
   const onSubmit = async (data) => {
     try {
+      dispatch(RegisterUser(data))
      
     } catch (error) {
       console.error(error);
