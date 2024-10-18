@@ -1,6 +1,6 @@
 import { useState } from "react";
 import * as Yup from "yup";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 // form
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -16,6 +16,7 @@ import { LoginUser } from "../../redux/slices/auth";
 // ----------------------------------------------------------------------
 
 export default function AuthLoginForm() {
+
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -49,6 +50,8 @@ export default function AuthLoginForm() {
     try {
       console.log(data)
      dispatch(LoginUser(data))
+     
+
     } catch (error) {
       console.error(error);
       reset();

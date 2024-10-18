@@ -10,6 +10,8 @@ import useSettings from "../../hooks/useSettings";
 import { Nav_Buttons, Nav_Setting, Profile_Menu } from "../../data";
 import { faker } from '@faker-js/faker';
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { LogoutUser } from "../../redux/slices/auth";
 
 
 
@@ -44,6 +46,8 @@ const SideBar = () => {
     setAnchorEl(null);
   };
 
+
+  const dispatch = useDispatch()
 
 
   const { onToggleMode } = useSettings();
@@ -218,7 +222,8 @@ const SideBar = () => {
                         navigate("/settings");
                       }
                       else {
-                        navigate("/auth/login");
+                        // navigate("/auth/login");
+                        dispatch(LogoutUser())
 
                       }
                     }}
