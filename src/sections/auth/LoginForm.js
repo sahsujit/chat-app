@@ -1,6 +1,6 @@
 import { useState } from "react";
 import * as Yup from "yup";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate, useNavigation } from "react-router-dom";
 // form
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -21,6 +21,7 @@ export default function AuthLoginForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const {isLoading} = useSelector((state) => state.auth);
+  const navigate = useNavigate()
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -46,21 +47,38 @@ export default function AuthLoginForm() {
     formState: { errors },
   } = methods;
 
-  const onSubmit = async (data) => {
-    try {
-      console.log(data)
-     dispatch(LoginUser(data))
+  // const onSubmit = async (data) => {
+  //   try {
+  //     console.log(data)
+  //   dispatch(LoginUser(data))
+   
      
 
+  //   } catch (error) {
+  //     console.error(error);
+  //     reset();
+  //     setError("afterSubmit", {
+  //       ...error,
+  //       message: error.message,
+  //     });
+  //   }
+  // };
+
+
+  const onSubmit = async (data) => {
+    try {
+      const res = await dispatch(LoginUser(data));
+      if (res.success) {
+        reset();
+        navigate("/app");
+      }
     } catch (error) {
       console.error(error);
-      reset();
-      setError("afterSubmit", {
-        ...error,
-        message: error.message,
-      });
+      setError("afterSubmit", { message: error.error || "Login failed" });
     }
   };
+  
+
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

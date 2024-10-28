@@ -2,7 +2,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import axios from "../../utils/axios";
-
+import { showSnackbar } from "./app";
 
 const initialState = {
   isLoggedIn: false,
@@ -65,16 +65,16 @@ export function NewPassword(formValues) {
               token: response.data.token,
             })
           );
-        // dispatch(
-        //   showSnackbar({ severity: "success", message: response.data.message })
-        // );
+        dispatch(
+          showSnackbar({ severity: "success", message: response.data.message })
+        );
         dispatch(
           slice.actions.updateIsLoading({ isLoading: false, error: false })
         );
       })
       .catch(function (error) {
         console.log(error);
-        // dispatch(showSnackbar({ severity: "error", message: error.message }));
+        dispatch(showSnackbar({ severity: "error", message: error.message }));
         dispatch(
           slice.actions.updateIsLoading({ isLoading: false, error: true })
         );
@@ -101,67 +101,107 @@ export function ForgotPassword(formValues) {
       .then(function (response) {
         console.log(response);
 
-        // dispatch(
-        //   showSnackbar({ severity: "success", message: response.data.message })
-        // );
+        dispatch(
+          showSnackbar({ severity: "success", message: response.data.message })
+        );
         dispatch(
           slice.actions.updateIsLoading({ isLoading: false, error: false })
         );
       })
       .catch(function (error) {
         console.log(error);
-        // dispatch(showSnackbar({ severity: "error", message: error.message }));
+        dispatch(showSnackbar({ severity: "error", message: error.message }));
         dispatch(
           slice.actions.updateIsLoading({ isLoading: false, error: true })
         );
       });
   };
 }
+
+// export function LoginUser(formValues) {
+//   return async (dispatch, getState) => {
+//     // Make API call here
+
+//     dispatch(slice.actions.updateIsLoading({ isLoading: true, error: false }));
+
+//     await axios
+//       .post(
+//         "/auth/login",
+//         {
+//           ...formValues,
+//         },
+//         {
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//         }
+//       )
+//       .then(function (response) {
+//         console.log(response);
+//         dispatch(
+//           slice.actions.logIn({
+//             isLoggedIn: true,
+//             token: response.data.token,
+//             user_id: response.data.user_id,
+//           })
+//         );
+//         window.localStorage.setItem("user_id", response.data.user_id);
+        
+//         // dispatch(
+//         //   showSnackbar({ severity: "success", message: response.data.message })
+//         // );
+//         dispatch(
+//           slice.actions.updateIsLoading({ isLoading: false, error: false })
+//         );
+//       })
+//       .catch(function (error) {
+//         console.log(error);
+//         // dispatch(showSnackbar({ severity: "error", message: error.message }));
+//         dispatch(
+//           slice.actions.updateIsLoading({ isLoading: false, error: true })
+//         );
+//       });
+//   };
+// }
+
 
 export function LoginUser(formValues) {
   return async (dispatch, getState) => {
-    // Make API call here
-
     dispatch(slice.actions.updateIsLoading({ isLoading: true, error: false }));
 
-    await axios
-      .post(
-        "/auth/login",
-        {
-          ...formValues,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then(function (response) {
-        console.log(response);
-        dispatch(
-          slice.actions.logIn({
-            isLoggedIn: true,
-            token: response.data.token,
-            user_id: response.data.user_id,
-          })
-        );
-        window.localStorage.setItem("user_id", response.data.user_id);
-        // dispatch(
-        //   showSnackbar({ severity: "success", message: response.data.message })
-        // );
-        dispatch(
-          slice.actions.updateIsLoading({ isLoading: false, error: false })
-        );
-      })
-      .catch(function (error) {
-        console.log(error);
-        // dispatch(showSnackbar({ severity: "error", message: error.message }));
-        dispatch(
-          slice.actions.updateIsLoading({ isLoading: false, error: true })
-        );
+    try {
+      const response = await axios.post("/auth/login", formValues, {
+        headers: { "Content-Type": "application/json" },
       });
+
+      dispatch(
+        slice.actions.logIn({
+          isLoggedIn: true,
+          token: response.data.token,
+          user_id: response.data.user_id,
+        })
+      );
+
+      window.localStorage.setItem("user_id", response.data.user_id);
+      dispatch(
+        showSnackbar({ severity: "success", message:"Login successfully" })
+      );
+      dispatch(slice.actions.updateIsLoading({ isLoading: false, error: false }));
+
+      // Return success result
+      return Promise.resolve({ success: true });
+    } catch (error) {
+      console.log(error);
+      dispatch(showSnackbar({ severity: "error", message: error.message }));
+
+      dispatch(slice.actions.updateIsLoading({ isLoading: false, error: true }));
+      return Promise.reject({ success: false, error: error.message });
+    }
   };
 }
+
+
+
 
 export function LogoutUser() {
   return async (dispatch, getState) => {
@@ -192,16 +232,16 @@ export function RegisterUser(formValues) {
           slice.actions.updateRegisterEmail({ email: formValues.email })
         );
 
-        // dispatch(
-        //   showSnackbar({ severity: "success", message: response.data.message })
-        // );
+        dispatch(
+          showSnackbar({ severity: "success", message: response.data.message })
+        );
         dispatch(
           slice.actions.updateIsLoading({ isLoading: false, error: false })
         );
       })
       .catch(function (error) {
         console.log(error);
-        // dispatch(showSnackbar({ severity: "error", message: error.message }));
+        dispatch(showSnackbar({ severity: "error", message: error.message }));
         dispatch(
           slice.actions.updateIsLoading({ error: true, isLoading: false })
         );
@@ -242,19 +282,22 @@ export function VerifyEmail(formValues) {
         );
 
 
-        // dispatch(
-        //   showSnackbar({ severity: "success", message: response.data.message })
-        // );
+        dispatch(
+          showSnackbar({ severity: "success", message: response.data.message })
+        );
         dispatch(
           slice.actions.updateIsLoading({ isLoading: false, error: false })
         );
       })
       .catch(function (error) {
         console.log(error);
-        // dispatch(showSnackbar({ severity: "error", message: error.message }));
+        dispatch(showSnackbar({ severity: "error", message: error.message }));
         dispatch(
           slice.actions.updateIsLoading({ error: true, isLoading: false })
         );
       });
   };
 }
+
+
+
