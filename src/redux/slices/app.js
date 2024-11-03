@@ -33,6 +33,7 @@ const slice = createSlice({
           console.log("This is getting executed");
           state.snackbar.open = false;
           state.snackbar.message = null;
+          state.snackbar.severity = null;
         },
 
     }
