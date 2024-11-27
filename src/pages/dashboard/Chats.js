@@ -4,7 +4,7 @@ import { ArchiveBox, CircleDashed, MagnifyingGlass, Users} from 'phosphor-react'
 import { SimpleBarStyle } from "../../components/Scrollbar";
 
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Search,
     SearchIconWrapper,
@@ -13,9 +13,27 @@ import {
 import { ChatList } from '../../data';
 import ChatElement from '../../components/ChatElement';
 import Friends from '../../sections/Dashboard/Friends';
+import { useSelector, useDispatch } from 'react-redux';
+import { FetchDirectConversations } from '../../redux/slices/conversaction';
+import { socket } from '../../socket';
+
+
+const user_id = window.localStorage.getItem("user_id");
 
 const Chats = () => {
     const theme = useTheme()
+
+    const {conversations} = useSelector((state) => state.conversation.direct_chat);
+
+    const dispatch = useDispatch();
+    useEffect(() => {
+      socket.emit("get_direct_conversations", { user_id }, (data) => {
+        console.log(data); // this data is the list of conversations
+        // dispatch action
+  
+        dispatch(FetchDirectConversations({ conversations: data }));
+      });
+    }, []);
 
     const [openDialog, setOpenDialog] = useState(false);
 
@@ -94,14 +112,14 @@ const Chats = () => {
                   Pinned
                 </Typography> */}
                 {/* Chat List */}
-                {ChatList.filter((el) => el.pinned).map((el, idx) => {
+                {/* {ChatList.filter((el) => el.pinned).map((el, idx) => {
                   return <ChatElement {...el} />;
-                })}
+                })} */}
                 <Typography variant="subtitle2" sx={{ color: "#676667" }}>
                   All Chats
                 </Typography>
                 {/* Chat List */}
-                {ChatList.filter((el) => !el.pinned).map((el, idx) => {
+                {conversations.filter((el) => !el.pinned).map((el, idx) => {
                   return <ChatElement {...el} />;
                 })}
               </Stack>
